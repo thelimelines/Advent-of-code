@@ -1,4 +1,4 @@
-"""Utility functions and classes for calculating distances.
+"""Day 1 Advent of code solution.
 
 This module provides:
 - `calculate_total_distance`: Calculate the absolute summed distance between two sorted
@@ -53,7 +53,6 @@ def similarity_score(file_path: str) -> int:
     return int(
         np_sum([value * np_sum(dist2 == value) for value in dist1]),
     )
-
 
 
 def tests() -> None:
