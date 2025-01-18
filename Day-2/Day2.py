@@ -59,7 +59,32 @@ def count_safe_reports(file_path: Path) -> int:
     return safe_cnt
 
 
-def test_algorithm() -> None:
+def safe_problem_dampened(file_path: Path) -> int:
+    """Count the number of safe reports in the input file when any 1 value may be removed (problem dampener).
+
+    Args:
+        file_path (Path): Path to the input file.
+
+    Returns:
+        int: Number of safe reports.
+
+    """
+    safe_cnt = 0
+    with file_path.open() as file:
+        for line in file:
+            report = [int(x) for x in line.split()]  # Parse as a list of integers
+            if is_safe_report(report):
+                safe_cnt += 1
+            else:
+                for i in range(len(report)):
+                    temp_report = report[:i] + report[i+1:]  # Create a copy excluding the i-th element
+                    if is_safe_report(temp_report):
+                        safe_cnt += 1
+                        break
+    return safe_cnt
+
+
+def tests() -> None:
     """Test the algorithm with a sample input file and validate the output."""
     test_file_path = Path("Day-2/test_input.txt")
     expected_safe_count = 2  # Expected result for the test input
@@ -71,12 +96,23 @@ def test_algorithm() -> None:
             "Test failed! Expected %s, but got %s.", expected_safe_count, result,
         )
 
+    expected_safe_count = 4  # Expected result for the test input
+    result = safe_problem_dampened(test_file_path)
+    if result == expected_safe_count:
+        logging.info("Test passed!")
+    else:
+        logging.error(
+            "Test failed! Expected %s, but got %s.", expected_safe_count, result,
+        )
+
 
 if __name__ == "__main__":
     # Uncomment the line below to test the function
-    test_algorithm()
+    tests()
 
     # Count safe reports for the actual input file
     input_file_path = Path("Day-2/Day2_input.txt")
     safe_reports = count_safe_reports(input_file_path)
     logging.info("Number of safe reports: %s", safe_reports)
+    safe_dampened_reports = safe_problem_dampened(input_file_path)
+    logging.info("Number of safe reports with problem dampener: %s", safe_dampened_reports)
