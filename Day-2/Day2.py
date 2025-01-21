@@ -30,12 +30,16 @@ def is_safe_report(report: list[int]) -> bool:
     """
     # Check if the report is strictly increasing
     if all(i < j for i, j in zip(report, report[1:])):
-        return all(MIN_DIFFERENCE <= j - i <= MAX_DIFFERENCE for i, j in
-                   zip(report, report[1:]))
+        return all(
+            MIN_DIFFERENCE <= j - i <= MAX_DIFFERENCE
+            for i, j in zip(report, report[1:])
+        )
     # Check if the report is strictly decreasing
     if all(i > j for i, j in zip(report, report[1:])):
-        return all(-MAX_DIFFERENCE <= j - i <= -MIN_DIFFERENCE for i, j in
-                   zip(report, report[1:]))
+        return all(
+            -MAX_DIFFERENCE <= j - i <= -MIN_DIFFERENCE
+            for i, j in zip(report, report[1:])
+        )
     # Report is neither increasing nor decreasing
     return False
 
@@ -77,7 +81,9 @@ def safe_problem_dampened(file_path: Path) -> int:
                 safe_cnt += 1
             else:
                 for i in range(len(report)):
-                    temp_report = report[:i] + report[i+1:]  # Create a copy excluding the i-th element
+                    temp_report = (
+                        report[:i] + report[i + 1 :]
+                    )  # Create a copy excluding the i-th element
                     if is_safe_report(temp_report):
                         safe_cnt += 1
                         break
@@ -93,7 +99,9 @@ def tests() -> None:
         logging.info("Test passed!")
     else:
         logging.error(
-            "Test failed! Expected %s, but got %s.", expected_safe_count, result,
+            "Test failed! Expected %s, but got %s.",
+            expected_safe_count,
+            result,
         )
 
     expected_safe_count = 4  # Expected result for the test input
@@ -102,7 +110,9 @@ def tests() -> None:
         logging.info("Test passed!")
     else:
         logging.error(
-            "Test failed! Expected %s, but got %s.", expected_safe_count, result,
+            "Test failed! Expected %s, but got %s.",
+            expected_safe_count,
+            result,
         )
 
 
@@ -115,4 +125,6 @@ if __name__ == "__main__":
     safe_reports = count_safe_reports(input_file_path)
     logging.info("Number of safe reports: %s", safe_reports)
     safe_dampened_reports = safe_problem_dampened(input_file_path)
-    logging.info("Number of safe reports with problem dampener: %s", safe_dampened_reports)
+    logging.info(
+        "Number of safe reports with problem dampener: %s", safe_dampened_reports
+    )
